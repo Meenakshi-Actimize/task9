@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <title>index</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- slider cdn -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+   <!-- fontawesome cdn-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <script src="./sheet.json"></script>  
+    
+
+    <body onload="getData('available')">
+        <div class="container-fluid mt-5">
+            <h1 class="text-center text-success">MS COLLECTIONS</h1>
+            <hr>
+            </div>
+
+            <!-- nav items -->
+
+      <div class="container-fluid  bg-light p-3">
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="" class="text-decoration-none" onclick="getData('available')">Available</a></li>
+            <li><a data-toggle="pill" href="" class="text-decoration-none" onclick="getData('upcoming')">Upcoming</a></li>
+            <li><a data-toggle="pill" href="" class="text-decoration-none" onclick="getData('Missed')">Missed</a></li>
+          </ul>
+      </div>
+      
+ 
+        <div class="container-fluid mt-5">
+        <div id="products" class=" p-2"></div>
+        </div>
+
+        <!-- swiper buttons -->
+
+        <div class="swiper-button-prev d-block mt-5 pt-5"><br/><br/><br/><br/></div>
+        <div class="swiper-button-next d-block mt-5 pt-5"><br/><br/><br/><br/></div>
+
+
+<script>
+
+    // Math function for percentage calculation
+
+function Percentage(value,percent){
+    reduced = (100-percent);
+
+   final = (reduced/100)*value;
+   return Math.round(final);
+}
+
+    // card-items function
+
+function getData(status) {
+  var originalData = JSON.parse(data);
+
+  var btn = (status === 'available' ? 'Buy' : (status === 'upcoming' ? 'New Arrival' : 'Out of Stock'));
+  var add = '<div class="swiper mySwiper"><div class="swiper-wrapper ">';
+    
+  
+  add += originalData.reduce((out,item) => { 
+    //  console.table(item); 
+    if (item.status === status) {
+      const starRating = item.starratingValue;
+      const filledStar = '<span class="fa fa-star checked"></span> ';
+      const emptyStar = '<span class="fa fa-star"></span> ';
+      const starElements = filledStar.repeat(starRating) + emptyStar.repeat(5 - starRating);
+       var percent = Percentage(item.price, item.percentage);
+    
+      out += `
+        <div class="swiper-slide card map" style="width: 20rem; float: left; margin: 1px; text-align: left">
+          <img src="${item.image}" class="" alt="...">
+          <div class="card-body">
+            <h4 class="card-title text-center fs-8">${item.imagename}</h4>
+            <p class="card-text text-center text-decoration-line-through text-danger text-black fs-7">Price:${item.price}/-</p>
+            <p class="card-text mb-1 text-center text-success fs-6">Discount-:${item.percentage}%off</p>
+            <p class="card-text mb-1 text-left fs-7">Our Price:${percent}/-</p>
+            <div class="mt-1">
+              ${starElements}
+            </div>
+            <a href="#" class="btn btn-primary d-grid gap-2 col-12 mx-auto mt-2 p-1 shadow">
+              <p class="card-text" style="color: white; text-align: center">${btn}</p>
+            </a>
+           
+          </div>
+        </div>
+        
+      `;
+    }
+    return out;
+},'');
+  add += '</div></div>'; 
+  // console.log(add)
+
+  document.getElementById("products").innerHTML = add;
+  changeSwiper();
+
+}
+
+ </script>
+</body>
+</html>
+
+    <!-- swiper function -->
+
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+            
+<script>
+    function changeSwiper() {
+      
+    var swiper = new Swiper(".mySwiper", {
+      
+      slidesPerView: 1,
+      spaceBetween: 10,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+          319: {
+          slidesPerView: 1,
+          spaceBetween:10,
+        },
+        576: {
+          slidesPerView: 2,
+          spaceBetween:20,
+          },
+       992: {
+          slidesPerView: 3,
+          spaceBetween:30,
+        
+         
+        },
+        1200: {
+          slidesPerView: 5,
+          spaceBetween:20,
+          
+          },
+        },
+      });
+    }
+</script>
